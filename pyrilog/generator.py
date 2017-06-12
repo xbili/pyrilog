@@ -8,7 +8,7 @@ class Generator(object):
     WIRES = 'wire [{count}:0] wires;'
     WIRE = 'wires[{id}]'
     RESULT_WIRE = 'assign sum[{}] = {};'
-    INPUT_WIRE = 'assign wires[{wire_id}] = in_{input_num}[{col}]'
+    INPUT_WIRE = 'assign wires[{wire_id}] = in_{input_num}[{col}];'
 
     MODULE = 'module {name}({outputs}, {inputs});'
     INPUT = 'input [{input_width}:0] {inputs};'
