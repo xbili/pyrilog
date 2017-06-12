@@ -8,6 +8,7 @@ class Generator(object):
     WIRES = 'wire [{count}:0] wires;'
     WIRE = 'wires[{id}]'
     RESULT_WIRE = 'assign sum[{}] = {};'
+    INPUT_WIRE = 'assign wires[{wire_id}] = in_{input_num}[{col}]'
 
     MODULE = 'module {name}({outputs}, {inputs});'
     INPUT = 'input [{input_width}:0] {inputs};'
@@ -24,6 +25,7 @@ class Generator(object):
     def ingest(self, wallace):
         """Takes in a Wallace tree and generates the code to internal memory"""
 
+        # Get inputs of the Wallace tree
         inputs = self._get_inputs(wallace)
         start = self.MODULE.format(name=self._name,
                                    inputs=', '.join(inputs),
@@ -36,13 +38,11 @@ class Generator(object):
             .format(output_width=wallace.get_result_bit_width()-1,
                     outputs=self.OUTPUT_WIRE_NAME)
 
-        self._lines = [
-            start,
-            declare_in,
-            declare_out,
-        ]
-
+        self._lines = [start, declare_in, declare_out]
         self._lines.append(self._declare_wires())
+
+        for inpt in self._assign_input_wires(wallace):
+            self._lines.append(inpt)
 
         for ha in wallace._half_adders:
             self._lines.append(self._half_adder(ha))
@@ -64,6 +64,21 @@ class Generator(object):
 
     def _get_inputs(self, wallace):
         return ['in_{}'.format(i) for i in range(0, wallace.get_operands())]
+
+
+    def _assign_input_wires(self, wallace):
+        """Assign each input wire into their respective wires."""
+
+        res = []
+
+        layer = wallace.get_input_layer()
+        for col in range(0, layer.get_columns()):
+            for row, wire in enumerate(layer.get_wires(col=col)):
+                res.append(self.INPUT_WIRE.format(wire_id=wire.id,
+                                                  input_num=row,
+                                                  col=col))
+
+        return res
 
 
     def _declare_wires(self):

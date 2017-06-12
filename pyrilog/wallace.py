@@ -25,6 +25,9 @@ class Wallace(object):
         self._full_adders = []
         self._half_adders = []
 
+        # 2D list to represent the input wires
+        self._input_wires = []
+
         self._result_bit_width = result_bit_width(self._k,
                                                   self._width)
 
@@ -47,6 +50,11 @@ class Wallace(object):
         return self._layers
 
 
+    def get_input_layer(self):
+
+        return self._layers[0]
+
+
     def get_result(self):
         """Returns the layer that contains the result bits."""
 
@@ -58,6 +66,18 @@ class Wallace(object):
 
     def _build_tree(self):
         """Builds the PPRT using full and half adders"""
+
+        cpa_layer = self._build_csa_layer()
+        result = self._build_cpa_layer(cpa_layer)
+        self._layers.append(result)
+
+
+    def _build_csa_layer(self):
+        """
+        Builds the Carry Save Adder layers.
+
+        Returns the layer for CPA.
+        """
 
         # Build the first layer with all the input bits first
         curr = Layer(columns=self._result_bit_width)
@@ -75,8 +95,7 @@ class Wallace(object):
 
             curr = next_layer
 
-        cpa_layer = self._build_cpa_layer(curr)
-        self._layers.append(cpa_layer)
+        return curr
 
 
     def _build_layer(self, layer):
