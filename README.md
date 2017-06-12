@@ -11,7 +11,7 @@ Pyrilog is hosted on PyPI.
 
 ## Usage
 
-`pyrilog <operands> <width> -o <file directory>`
+`pyrilog -k <operands> -w <width> -n <module name> -o <file directory>`
 
 ### Arguments
 
