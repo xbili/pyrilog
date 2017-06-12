@@ -15,6 +15,7 @@ Pyrilog is hosted on PyPI.
 
 ### Arguments
 
-* `<inputs>` represents the number of inputs you want the tree to accomodate.
-* `<bits>` represents the number of bits each input has.
+* `<operands>` represents the number of inputs you want the tree to accomodate.
+* `<width>` represents the bit width of each input.
+* `<module name>` represents the what you want to call the Verilog module.
 * `<file directory>` is where you want the generated Verilog files to be placed.
