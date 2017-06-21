@@ -53,7 +53,7 @@ class Generator(object):
         result = wallace.get_result()
         for idx, wire in enumerate(result.get_wires()):
             self._lines.append(self.RESULT_WIRE.format(idx,
-                                                  self._wire(wire)))
+                                                       self._wire(wire)))
 
         self._lines.append(self.ENDMODULE)
 
@@ -90,10 +90,10 @@ class Generator(object):
         in_1, in_2 = half_adder.get_input_wires()
 
         return self.HALF_ADDER.format(id=half_adder.id,
-                                 out_sum=self._wire(out_sum),
-                                 out_carry=self._wire(out_carry),
-                                 in_1=self._wire(in_1),
-                                 in_2=self._wire(in_2))
+                                      out_sum=self._wire(out_sum),
+                                      out_carry=self._wire(out_carry),
+                                      in_1=self._wire(in_1),
+                                      in_2=self._wire(in_2))
 
 
     def _full_adder(self, full_adder):
@@ -101,11 +101,11 @@ class Generator(object):
         in_1, in_2, in_3 = full_adder.get_input_wires()
 
         return self.FULL_ADDER.format(id=full_adder.id,
-                                 out_sum=self._wire(out_sum),
-                                 out_carry=self._wire(out_carry),
-                                 in_1=self._wire(in_1),
-                                 in_2=self._wire(in_2),
-                                 in_3=self._wire(in_3))
+                                      out_sum=self._wire(out_sum),
+                                      out_carry=self._wire(out_carry),
+                                      in_1=self._wire(in_1),
+                                      in_2=self._wire(in_2),
+                                      in_3=self._wire(in_3))
 
 
     def _wire(self, wire):
