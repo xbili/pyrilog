@@ -99,4 +99,4 @@ ENV/
 .mypy_cache/
 
 # Generated Verilog files for testing
-.v
+*.v
