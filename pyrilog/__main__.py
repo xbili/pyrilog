@@ -1,8 +1,8 @@
 import sys
 import getopt
 
-from wallace import Wallace
-from generator import Generator
+from .wallace import Wallace
+from .generator import Generator
 
 USAGE = 'Usage: {} -k <operands> -w <width> -n <name of module> -o <output file>'
 

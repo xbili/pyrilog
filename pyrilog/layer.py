@@ -19,11 +19,12 @@ class Layer(object):
 
     def get_wires(self, col=None):
         """Returns the list of wires in a column"""
+        res = []
 
         if col != None:
-            return self._wires.get(col)
+            res = self._wires.get(col)
+            return res if res != None else []
 
-        res = []
         for wires in self._wires.values():
             for wire in wires:
                 res.append(wire)
@@ -37,14 +38,15 @@ class Layer(object):
 
         if self._wires.get(column, None) == None:
             self._wires[column] = []
-            self._columns += 1
+            self._columns = max(column + 1, self._columns)
 
         self._wires[column].append(wire)
 
     def get_rows(self):
         """Returns the number of rows this layer has"""
+        rows = [len(wires) for wires in self._wires.values()]
 
-        return max([len(wires) for wires in self._wires.values()])
+        return max(rows) if len(rows) > 0 else 0
 
     def get_columns(self):
         """Returns the number of columns this layer has"""

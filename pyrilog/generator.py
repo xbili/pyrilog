@@ -1,4 +1,4 @@
-from wire import Wire
+from .wire import Wire
 
 class Generator(object):
     """Generates Verilog HDL code."""

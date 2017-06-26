@@ -1,8 +1,8 @@
-from utils import chunks, result_bit_width
-from layer import Layer
-from wire import Wire
-from half_adder import HalfAdder
-from full_adder import FullAdder
+from .utils import chunks, result_bit_width
+from .layer import Layer
+from .wire import Wire
+from .half_adder import HalfAdder
+from .full_adder import FullAdder
 
 class Wallace(object):
     """
