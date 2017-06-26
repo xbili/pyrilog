@@ -27,5 +27,10 @@ class FullAdder(object):
         """Returns the input wires of the full adder"""
         return self._in_1, self._in_2, self._in_3
 
-    def reset_count():
-        FullAdder._count = 0
+    @classmethod
+    def reset_count(clf):
+        clf._count = 0
+
+    @classmethod
+    def get_count(clf):
+        return clf._count

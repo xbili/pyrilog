@@ -20,3 +20,8 @@ def test_full_adder():
     assert fa.id == 0
     assert fa.get_output_wires() == (out_sum, out_carry)
     assert fa.get_input_wires() == (in_1, in_2, in_3)
+
+    fa_2 = FullAdder(in_1, in_2, in_3,
+                     out_sum, out_carry)
+    assert fa_2.id == 1
+    assert FullAdder.get_count() == 2

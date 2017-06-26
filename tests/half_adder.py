@@ -19,3 +19,9 @@ def test_half_adder():
     assert ha.id == 0
     assert ha.get_output_wires() == (out_sum, out_carry)
     assert ha.get_input_wires() == (in_1, in_2)
+    assert HalfAdder.get_count() == 1
+
+    ha_1 = HalfAdder(in_1, in_2,
+                   out_sum, out_carry)
+    assert ha_1.id == 1
+    assert HalfAdder.get_count() == 2
