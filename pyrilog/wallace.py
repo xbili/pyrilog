@@ -34,6 +34,11 @@ class Wallace(object):
         self._build_tree()
 
 
+    def generate(self, generator):
+        generator.ingest(self)
+        return generator.generate()
+
+
     def get_operands(self):
         return self._k
 
@@ -188,8 +193,3 @@ class Wallace(object):
                 carry = out_carry
 
         return result
-
-
-    def generate(self, generator):
-        generator.ingest(self)
-        return generator.generate()
