@@ -11,10 +11,6 @@ class Layer(object):
         #   Key: Column position
         #   Value: Wires in that column
         self._wires = {}
-
-        for i in range(0, self._columns):
-            self._wires[i] = []
-
         Layer._count += 1
 
     def get_wires(self, col=None):

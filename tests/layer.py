@@ -47,3 +47,9 @@ def test_layer_add_wire():
 
     # Column 2 should have no wires
     assert len(layer.get_wires(col=2)) == 0
+
+    wire_2 = Wire(1)
+    layer.add_wire(wire_2)
+
+    assert layer.get_columns() == 2
+    assert layer.get_rows() == 2
