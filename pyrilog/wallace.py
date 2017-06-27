@@ -34,11 +34,6 @@ class Wallace(object):
         self._build_tree()
 
 
-    def generate(self, generator):
-        generator.ingest(self)
-        return generator.generate()
-
-
     @property
     def operands(self):
         return self._k
