@@ -39,28 +39,33 @@ class Wallace(object):
         return generator.generate()
 
 
-    def get_operands(self):
+    @property
+    def operands(self):
         return self._k
 
 
-    def get_width(self):
+    @property
+    def width(self):
         return self._width
 
 
-    def get_result_bit_width(self):
+    @property
+    def result_width(self):
         return self._result_bit_width
 
 
-    def get_layers(self):
+    @property
+    def layers(self):
         return self._layers
 
 
-    def get_input_layer(self):
-
+    @property
+    def input_layer(self):
         return self._layers[0]
 
 
-    def get_result(self):
+    @property
+    def result(self):
         """Returns the layer that contains the result bits."""
 
         # This layer should only have 1 row

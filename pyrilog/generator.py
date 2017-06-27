@@ -31,11 +31,11 @@ class Generator(object):
                                    inputs=', '.join(inputs),
                                    outputs=self.OUTPUT_WIRE_NAME)
 
-        declare_in = self.INPUT.format(input_width=wallace.get_width()-1,
+        declare_in = self.INPUT.format(input_width=wallace.width - 1,
                                        inputs=', '.join(inputs))
 
         declare_out = self.OUTPUT\
-            .format(output_width=wallace.get_result_bit_width()-1,
+            .format(output_width=wallace.result_width - 1,
                     outputs=self.OUTPUT_WIRE_NAME)
 
         self._lines = [start, declare_in, declare_out]
@@ -50,7 +50,7 @@ class Generator(object):
         for fa in wallace._full_adders:
             self._lines.append(self._full_adder(fa))
 
-        result = wallace.get_result()
+        result = wallace.result
         for idx, wire in enumerate(result.get_wires()):
             self._lines.append(self.RESULT_WIRE.format(idx,
                                                        self._wire(wire)))
@@ -63,7 +63,7 @@ class Generator(object):
 
 
     def _get_inputs(self, wallace):
-        return ['in_{}'.format(i) for i in range(0, wallace.get_operands())]
+        return ['in_{}'.format(i) for i in range(0, wallace.operands)]
 
 
     def _assign_input_wires(self, wallace):
@@ -71,7 +71,7 @@ class Generator(object):
 
         res = []
 
-        layer = wallace.get_input_layer()
+        layer = wallace.input_layer
         for col in range(0, layer.get_columns()):
             for row, wire in enumerate(layer.get_wires(col=col)):
                 res.append(self.INPUT_WIRE.format(wire_id=wire.id,
