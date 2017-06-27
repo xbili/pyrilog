@@ -25,6 +25,7 @@ if __name__ == '__main__':
 
     wallace = Wallace(operands, width)
     generator = Generator(name)
+    generator.ingest(wallace)
 
     with open(output_file, 'w') as f:
-        f.write(wallace.generate(generator))
+        f.write(generator.generate())
