@@ -1,7 +1,12 @@
 from .wire import Wire
 
 class Generator(object):
-    """Generates Verilog HDL code."""
+    """
+    Generates the Verilog code depending on what kind of structure we want
+    to generate.
+
+    A structure should contain wires and layers of full and half adders.
+    """
 
     FULL_ADDER = 'full_adder fa_{id}({out_sum}, {out_carry}, {in_1}, {in_2}, {in_3});'
     HALF_ADDER = 'half_adder ha_{id}({out_sum}, {out_carry}, {in_1}, {in_2});'

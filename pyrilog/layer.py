@@ -1,5 +1,8 @@
 class Layer(object):
-    """Layer of wires in a PPRT."""
+    """
+    A layer is a single stage in a Partial Product Reduction Tree (PPRT). It
+    consists of rows and columns.
+    """
 
     _count = 0
 
