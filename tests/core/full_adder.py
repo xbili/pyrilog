@@ -3,7 +3,7 @@ from nose import with_setup
 from pyrilog import Wire
 from pyrilog import FullAdder
 
-from .utils import reset_counts
+from ..utils import reset_counts
 
 
 @with_setup(reset_counts,)

@@ -1,4 +1,4 @@
-from .utils import chunks, result_bit_width
+from ..utils import chunks, result_bit_width
 from .layer import Layer
 from .wire import Wire
 from .half_adder import HalfAdder

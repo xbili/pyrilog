@@ -3,7 +3,7 @@ from nose import with_setup
 from pyrilog import Wallace
 from pyrilog.utils import result_bit_width
 
-from .utils import reset_counts
+from ..utils import reset_counts
 
 @with_setup(reset_counts,)
 def test_wallace_constructor():
