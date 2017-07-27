@@ -1,4 +1,7 @@
-class HalfAdder(object):
+from .entity import Entity
+
+
+class HalfAdder(Entity):
     """HalfAdder encapsulates a hardware gate level half adder."""
 
     _count = 0
@@ -13,18 +16,20 @@ class HalfAdder(object):
         self.id = HalfAdder._count
         self._in_1 = in_1
         self._in_2 = in_2
-        self._out_sum = out_sum
-        self._out_carry = out_carry
+        self._sum = out_sum
+        self._carry = out_carry
 
         HalfAdder._count += 1
 
-    def get_output_wires(self):
+    @property
+    def outputs(self):
         """Returns the output wires of the full adder"""
-        return self._out_sum, self._out_carry
+        return [self._sum, self._carry]
 
-    def get_input_wires(self):
+    @property
+    def inputs(self):
         """Returns the input wires of the full adder"""
-        return self._in_1, self._in_2
+        return [self._in_1, self._in_2]
 
     @classmethod
     def get_count(cls):
