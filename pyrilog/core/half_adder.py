@@ -32,7 +32,8 @@ class HalfAdder(Entity):
         return [self._in_1, self._in_2]
 
     @classmethod
-    def get_count(cls):
+    @property
+    def count(cls):
         return cls._count
 
     @classmethod

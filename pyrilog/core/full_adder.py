@@ -32,10 +32,10 @@ class FullAdder(Entity):
         return [self._sum, self._carry]
 
     @classmethod
-    def reset_count(clf):
-        clf._count = 0
-
-    @classmethod
     @property
     def count(clf):
         return clf._count
+
+    @classmethod
+    def reset_count(clf):
+        clf._count = 0
