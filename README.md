@@ -1,6 +1,6 @@
 # Pyrilog
 
-[![Build Status](https://travis-ci.com/xbili/pyrilog.svg?token=xyqyxbAevSn1zLgfHgcb&branch=refactor)](https://travis-ci.com/xbili/pyrilog)
+[![Build Status](https://travis-ci.com/xbili/pyrilog.svg?token=xyqyxbAevSn1zLgfHgcb&branch=master)](https://travis-ci.com/xbili/pyrilog)
 
 Generates a Fused Multiply Add (FMA) unit in Verilog.
 
