@@ -68,11 +68,11 @@ def _create_partial_products(multiplier, multiplicand):
     final_layer[-1] = Wire(value=1, label='1')
 
     for col_a, a in enumerate(multiplicand):
-        label = 'a{}x{}'.format(col_a, len(multiplier))
+        label = 'a{}x{}'.format(col_a, len(multiplier) - 1)
 
         out = Wire(label=label)
 
-        if col_a == 0:
+        if col_a == len(multiplicand) - 1:
             entities += [And(a, multiplier[-1], out)]
             final_layer[col_a + len(multiplier) - 1] = out
         else:
@@ -102,7 +102,8 @@ def _reduce_partial_products(partials):
     :rtype: List[List[Wire]], List[Entity]
     """
 
-    result_width = result_bit_width(len(partials), len(partials[0]))
+    bit_width = max(map(len, partials))
+    result_width = result_bit_width(len(partials), bit_width)
 
     entities = []
 
@@ -157,7 +158,10 @@ def _carry_propagate(columns):
 
     carry = None
     for column in columns:
-        if len(column) == 0:
+        if len(column) == 0 and not carry:
+            continue
+        elif len(column) == 0:
+            res += [carry]
             continue
 
         if len(column) == 1 and not carry:
