@@ -17,3 +17,8 @@ class Entity(ABC):
     @abstractmethod
     def outputs(self):
         pass
+
+    @property
+    @abstractmethod
+    def verilog(self):
+        pass

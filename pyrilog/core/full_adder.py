@@ -31,6 +31,10 @@ class FullAdder(Entity):
     def outputs(self):
         return [self._sum, self._carry]
 
+    @property
+    def verilog(self):
+        pass
+
     @classmethod
     @property
     def count(clf):

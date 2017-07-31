@@ -16,14 +16,24 @@ class Gate(Entity):
     def outputs(self):
         return [self._out]
 
+    @property
+    def verilog(self):
+        pass
+
 
 class And(Gate):
-    pass
+    @property
+    def verilog(self):
+        pass
 
 
 class Or(Gate):
-    pass
+    @property
+    def verilog(self):
+        pass
 
 
 class Not(Gate):
-    pass
+    @property
+    def verilog(self):
+        pass

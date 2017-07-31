@@ -31,6 +31,10 @@ class HalfAdder(Entity):
         """Returns the input wires of the full adder"""
         return [self._in_1, self._in_2]
 
+    @property
+    def verilog(self):
+        pass
+
     @classmethod
     @property
     def count(cls):
