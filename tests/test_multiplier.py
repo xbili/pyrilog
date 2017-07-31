@@ -3,8 +3,8 @@ from pprint import pprint
 from nose import with_setup
 
 from pyrilog.core.wire import Wire
-from pyrilog.create_multiplier import (
-    create_multiplier,
+from pyrilog.multiplier import (
+    create,
     _create_partial_products,
     _reduce_partial_products,
 )
@@ -33,8 +33,8 @@ def test_4x4_pprt():
 
 
 @with_setup(reset_counts,)
-def test_create_multiplier():
-    wires, entities = create_multiplier(4)
+def test_create():
+    wires, entities = create(4)
 
     # TODO: Figure out the test case for this.
 

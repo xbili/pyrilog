@@ -5,7 +5,7 @@ from pyrilog.core.gates import And, Not
 from pyrilog.utils import chunks, result_bit_width
 
 
-def create_multiplier(width, signed=True):
+def create(width, signed=True):
     """
     Creates a tree multiplier with a Wallace Partial Product Reduction
     Tree (PPRT).
