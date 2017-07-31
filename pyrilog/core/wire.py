@@ -9,11 +9,12 @@ class Wire(object):
 
     _count = 0
 
-    def __init__(self, value=None):
+    def __init__(self, value=None, label=None):
         assert isinstance(value, Wire) or value in (0, 1, None)
 
         self.id = Wire._count
         self._value = value
+        self._label = label
         Wire._count += 1
 
     @property
@@ -34,3 +35,6 @@ class Wire(object):
     @classmethod
     def reset_count(clf):
         clf._count = 0
+
+    def __repr__(self):
+        return self._label if self._label else 'Wire'

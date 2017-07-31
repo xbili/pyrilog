@@ -23,3 +23,7 @@ class And(Gate):
 
 class Or(Gate):
     pass
+
+
+class Not(Gate):
+    pass
