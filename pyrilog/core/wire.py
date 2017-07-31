@@ -29,12 +29,14 @@ class Wire(object):
 
     @property
     def verilog(self):
-        return 'wires[{}]'.format(self.id)
+        if self._value == None:
+            return 'wires[{}]'.format(self.id)
+        else:
+            return "1'b{}".format(self._value)
 
     @classmethod
-    @property
-    def count(clf):
-        return clf._count
+    def get_count(cls):
+        return cls._count
 
     @classmethod
     def reset_count(clf):

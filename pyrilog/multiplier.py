@@ -5,7 +5,7 @@ from pyrilog.core.gates import And, Not
 from pyrilog.utils import chunks, result_bit_width
 
 
-def create(width, signed=True):
+def create(multiplier, multiplicand, width, signed=True):
     """
     Creates a tree multiplier with a Wallace Partial Product Reduction
     Tree (PPRT).
@@ -14,13 +14,7 @@ def create(width, signed=True):
     :type signed: Bool
     :rtype: List[List[Wire]], List[Entity]
     """
-    multiplier = multiplicand = [Wire()] * width
-
-    partials, input_entities = _create_partial_products(
-        multiplier,
-        multiplicand,
-    )
-
+    partials, input_entities = _create_partial_products(multiplier, multiplicand)
     penultimate, reduction_entities = _reduce_partial_products(partials)
     output, cpa_entities = _carry_propagate(penultimate)
 
@@ -58,10 +52,9 @@ def _create_partial_products(multiplier, multiplicand):
             if col_a == len(multiplicand) - 1:
                 out2 = Wire(label=label)
                 product = And(a, x, out)
+                negate = Not(out, None, out2)
 
-                entities += [product]
-                entities += [Not(out, None, out2)]
-
+                entities += [product, negate]
                 layer[col_x + col_a] = out2
             else:
                 entities += [And(a, x, out)]
@@ -121,7 +114,11 @@ def _reduce_partial_products(partials):
         for idx, column in enumerate(columns):
 
             # Group chunks of bits into a full adder
-            for chunk in chunks([item for item in column if item], 3):
+            for chunk in chunks([item for item in column if item != None], 3):
+                if len(chunk) == 1:
+                    next_layer[idx] += chunk
+                    continue
+
                 s = Wire()
                 c = Wire()
 
@@ -134,11 +131,6 @@ def _reduce_partial_products(partials):
                     in_1, in_2 = chunk
                     ha = HalfAdder(in_1, in_2, s, c)
                     entities += [ha]
-                elif len(chunk) == 1:
-                    next_layer[idx] += chunk
-                    continue
-                else:
-                    continue
 
                 next_layer[idx] += [s]
                 if idx < result_width - 1:
@@ -165,6 +157,9 @@ def _carry_propagate(columns):
 
     carry = None
     for column in columns:
+        if len(column) == 0:
+            continue
+
         if len(column) == 1 and not carry:
             res += [column[0]]
             continue
@@ -175,8 +170,11 @@ def _carry_propagate(columns):
         if len(column) == 1:
             ha = HalfAdder(column[0], carry, s, c)
             entities += [ha]
+        elif len(column) == 2 and not carry:
+            ha = HalfAdder(column[0], column[1], s, c)
+            entities += [ha]
         elif len(column) == 2:
-            fa = HalfAdder(column[0], carry, s, c)
+            fa = FullAdder(column[0], column[1], carry, s, c)
             entities += [fa]
 
         res += [s]

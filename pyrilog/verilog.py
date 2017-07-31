@@ -13,8 +13,9 @@ def generate(inputs, outputs, entities):
     res += _declare_module(inputs, outputs)
     res += _declare_ports(inputs, outputs)
     res += _declare_wires()
+    res += _assign_ports(inputs, outputs)
     res += _declare_entities(entities)
-    res += 'endmodule'
+    res += ['endmodule']
 
     return '\n'.join(res)
 
@@ -22,7 +23,7 @@ def generate(inputs, outputs, entities):
 def _declare_module(inputs, outputs):
     inpt = ['in_{}'.format(i) for i in range(len(inputs))]
     output = ['out_{}'.format(i) for i in range(len(outputs))]
-    res = 'module({}, {})'.format(', '.join(inpt), ', '.join(outpt))
+    res = 'module({}, {});'.format(', '.join(output), ', '.join(inpt))
 
     return [res]
 
@@ -37,19 +38,21 @@ def _declare_ports(inputs, outputs):
     """
 
     # Declare inputs and outputs
-    declare_in = 'input [{}:0] {}'.format(len(inputs[0]),
-                                          ['in_{}'.format(i)
-                                           for i in range(len(inputs))])
+    inpt_str = ', '.join(['in_{}'.format(i) for i in range(len(inputs))])
+    output_str = ', '.join(['out_{}'.format(i) for i in range(len(outputs))])
 
-    declare_out = 'output [{}:0] {}'.format(len(outputs[0]),
-                                            ['out_{}'.format(i)
-                                             for i in range(len(outputs))])
+    declare_in = 'input [{}:0] {};'.format(len(inputs[0]) - 1, inpt_str)
+    declare_out = 'output [{}:0] {};'.format(len(outputs[0]) - 1, output_str)
 
+    return [declare_in, declare_out]
+
+
+def _assign_ports(inputs, outputs):
     # Assign the associated wires
     assign_in = []
     for input_num, inpt in enumerate(inputs):
-        for col, wire in inpt:
-            fmt = 'assign wires[{wire_id}] = in_{input_num}[{col}]'.format(
+        for col, wire in enumerate(inpt):
+            fmt = 'assign wires[{wire_id}] = in_{input_num}[{col}];'.format(
                 wire_id=wire.id,
                 input_num=input_num,
                 col=col,
@@ -58,16 +61,15 @@ def _declare_ports(inputs, outputs):
 
     assign_out = []
     for output_num, output in enumerate(outputs):
-        for col, wire in output:
-            fmt = 'assign wires[{wire_id}] = out_{output_num}[{col}]'.format(
+        for col, wire in enumerate(output):
+            fmt = 'assign out_{output_num}[{col}] = wires[{wire_id}];'.format(
                 wire_id=wire.id,
                 output_num=output_num,
                 col=col,
             )
             assign_out += [fmt]
 
-    return [declare_in, declare_out, *assign_in, *assign_out]
-
+    return [*assign_in, *assign_out]
 
 def _declare_wires():
     """
@@ -75,7 +77,7 @@ def _declare_wires():
 
     :rtype: List[string]
     """
-    return ['wire [{}:0] wires'.format(Wire.count)]
+    return ['wire [{}:0] wires;'.format(Wire.get_count() - 1)]
 
 
 def _declare_entities(entities):

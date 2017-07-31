@@ -32,7 +32,10 @@ def test_4x4_pprt():
 
 @with_setup(reset_counts,)
 def test_create():
-    wires, entities = create(4)
+    multiplier = [Wire()] * 4
+    multiplicand = [Wire()] * 4
+
+    wires, entities = create(multiplier, multiplicand, 4)
 
     # TODO: Figure out the test case for this.
 

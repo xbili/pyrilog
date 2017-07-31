@@ -24,7 +24,7 @@ class Gate(Entity):
 class And(Gate):
     @property
     def verilog(self):
-        return 'and({}, {}, {})'.format(
+        return 'and({}, {}, {});'.format(
             self._out.verilog,
             self._in_1.verilog,
             self._in_2.verilog,
@@ -34,7 +34,7 @@ class And(Gate):
 class Or(Gate):
     @property
     def verilog(self):
-        return 'or({}, {}, {})'.format(
+        return 'or({}, {}, {});'.format(
             self._out.verilog,
             self._in_1.verilog,
             self._in_2.verilog,
@@ -44,7 +44,7 @@ class Or(Gate):
 class Not(Gate):
     @property
     def verilog(self):
-        return 'not({}, {})'.format(
+        return 'not({}, {});'.format(
             self._out.verilog,
             self._in_1.verilog,
         )
