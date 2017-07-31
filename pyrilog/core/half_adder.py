@@ -1,4 +1,5 @@
 from .entity import Entity
+from pyrilog.constants import HALF_ADDER
 
 
 class HalfAdder(Entity):
@@ -33,7 +34,13 @@ class HalfAdder(Entity):
 
     @property
     def verilog(self):
-        pass
+        return HALF_ADDER.format(
+            id=self.id,
+            out_sum=self._sum.verilog,
+            out_carry=self._carry.verilog,
+            in_1=self._in_1.verilog,
+            in_2=self._in_2.verilog,
+        )
 
     @classmethod
     @property

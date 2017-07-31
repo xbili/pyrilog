@@ -27,6 +27,10 @@ class Wire(object):
 
         self._value = value
 
+    @property
+    def verilog(self):
+        return 'wires[{}]'.format(self.id)
+
     @classmethod
     @property
     def count(clf):

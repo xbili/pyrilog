@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from nose import with_setup
 
 from pyrilog.core.wire import Wire

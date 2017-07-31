@@ -1,4 +1,5 @@
 from .entity import Entity
+from pyrilog.constants import FULL_ADDER
 
 
 class FullAdder(Entity):
@@ -33,7 +34,14 @@ class FullAdder(Entity):
 
     @property
     def verilog(self):
-        pass
+        return FULL_ADDER.format(
+            id=self.id,
+            out_sum=self._sum.verilog,
+            out_carry=self._carry.verilog,
+            in_1=self._in_1.verilog,
+            in_2=self._in_2.verilog,
+            in_3=self._in_3.verilog,
+        )
 
     @classmethod
     @property
