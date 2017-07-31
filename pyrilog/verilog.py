@@ -1,5 +1,6 @@
 from pyrilog.core.wire import Wire
 
+
 def generate(inputs, outputs, entities):
     """
     Given the wires and entities of a hardware design, this method generates
