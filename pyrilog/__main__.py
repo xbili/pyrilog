@@ -1,7 +1,7 @@
 import click
 
 from pyrilog.core.wire import Wire
-from pyrilog.multiplier import create
+from pyrilog.fma import create
 from pyrilog.verilog import generate
 
 
@@ -29,9 +29,8 @@ from pyrilog.verilog import generate
 def main(size, width, output_dir, with_pipeline):
     print('WARNING: Current implementation only includes a multiplier')
 
-    multiplier, multiplicand = [Wire() for _ in range(width)], [Wire() for _ in range(width)]
-    output, entities = create(multiplier, multiplicand, width)
-    generated = generate([multiplier, multiplicand], [output], entities)
+    inputs, output, entities = create(width, size)
+    generated = generate(inputs, [output], entities)
 
     with open(output_dir, 'w') as f:
         f.write(generated)
