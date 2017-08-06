@@ -158,28 +158,26 @@ def _carry_propagate(columns):
 
     carry = None
     for column in columns:
+        if len(column) == 0:
+            continue
+
         if carry:
             s, c = Wire(), Wire()
             if len(column) == 2: # Combine 2 bits and carry with FA
                 adder = FullAdder(column[0], column[1], carry, s, c)
-            elif len(column) == 1: # Combine 1 bit and carry with HA
+            else: # Combine 1 bit and carry with HA
                 adder = HalfAdder(column[0], carry, s, c)
-            else:
-                continue
             res += [s]
             entities += [adder]
             carry = c
         else:
-            s = Wire()
             if len(column) == 2: # Combine two bits into with a single HA
-                c = Wire()
+                s, c = Wire(), Wire()
                 adder = HalfAdder(column[0], column[1], s, c)
-                res += [s]
                 entities += [adder]
                 carry = c
-            elif len(column) == 1: # We do not need to do anything to a solo bit
                 res += [s]
-            else:
-                continue
+            else: # Add the wire into result
+                res += [column[0]]
 
     return res, entities
