@@ -164,6 +164,8 @@ def _carry_propagate(columns):
                 adder = FullAdder(column[0], column[1], carry, s, c)
             elif len(column) == 1: # Combine 1 bit and carry with HA
                 adder = HalfAdder(column[0], carry, s, c)
+            else:
+                continue
             res += [s]
             entities += [adder]
             carry = c
@@ -177,5 +179,7 @@ def _carry_propagate(columns):
                 carry = c
             elif len(column) == 1: # We do not need to do anything to a solo bit
                 res += [s]
+            else:
+                continue
 
     return res, entities
