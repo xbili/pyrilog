@@ -2,7 +2,7 @@ from pyrilog import multiplier
 from pyrilog.core.wire import Wire
 
 
-def create(width, size, signed=True):
+def create(width, size, cpa=True, signed=True):
     # Generate all the partial products
     inputs, partials, entities = [], [], []
 
@@ -24,6 +24,7 @@ def create(width, size, signed=True):
     penultimate, reduction_entities = multiplier._reduce_partial_products(partials)
 
     # Carry Propagate Adder
-    output, cpa_entities = multiplier._carry_propagate(penultimate)
+    if cpa:
+        output, cpa_entities = multiplier._carry_propagate(penultimate)
 
     return inputs, output, entities + reduction_entities + cpa_entities
