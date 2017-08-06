@@ -23,8 +23,6 @@ def create(width, size, cpa=True, signed=True):
     # Reduce partials
     penultimate, reduction_entities = multiplier._reduce_partial_products(partials)
 
-    # Carry Propagate Adder
-    if cpa:
-        output, cpa_entities = multiplier._carry_propagate(penultimate)
+    output, cpa_entities = multiplier._carry_propagate(penultimate)
 
     return inputs, output, entities + reduction_entities + cpa_entities
