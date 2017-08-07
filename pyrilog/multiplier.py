@@ -116,8 +116,7 @@ def _reduce_partial_products(partials):
     :rtype: List[List[Wire]], List[Entity]
     """
 
-    bit_width = len(partials)
-    result_width = result_bit_width(max(map(len, partials)), bit_width)
+    result_width = len(partials)
     entities = []
 
     # Transform the partial products
@@ -192,5 +191,5 @@ def _carry_propagate(columns):
             else: # Add the wire into result
                 res += [column[0]]
 
-    # Last bit carry to be dropped
-    return res[:-1], entities
+    # Last carry bit to be dropped since it is in 2s complement
+    return res, entities

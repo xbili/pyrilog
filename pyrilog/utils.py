@@ -1,4 +1,4 @@
-from math import log, floor
+from math import log2, floor
 
 def chunks(l, n):
     """
@@ -12,5 +12,4 @@ def chunks(l, n):
 
 def result_bit_width(k, n):
     """Returns the result bit width for k n-bit operands."""
-
-    return n + floor(log(k, 2))
+    return n + floor(log2(k))
