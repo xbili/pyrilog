@@ -14,11 +14,31 @@ def create(multiplier, multiplicand, width, signed=True):
     :type signed: Bool
     :rtype: List[List[Wire]], List[Entity]
     """
-    partials, input_entities = _create_partial_products(multiplier, multiplicand)
+    partials, input_entities, compensation = _create_partial_products(multiplier, multiplicand)
     penultimate, reduction_entities = _reduce_partial_products(partials)
     output, cpa_entities = _carry_propagate(penultimate)
 
     return output, input_entities + reduction_entities + cpa_entities
+
+
+def compensate(wires, compensation):
+    """
+    Compensate negatively weighted bits in 2s complement representation
+    of the partial products.
+    """
+
+    # Group compensation bits together by moving them one column up
+    # until all the way to the left
+    for idx, col in enumerate(compensation):
+        for chunk in chunks(col, 2):
+            # The last column does not need to be negated again
+            if idx < len(compensation) - 1:
+                compensation[idx + 1] += [-1]
+
+            if len(chunk) == 1:
+                wires[idx] += [Wire(value=1, label='1')]
+
+    return wires
 
 
 def _create_partial_products(multiplier, multiplicand):
@@ -86,25 +106,6 @@ def _create_partial_products(multiplier, multiplicand):
 
     return wires, entities, compensation
 
-
-def compensate(wires, compensation):
-    """
-    Compensate negatively weighted bits in 2s complement representation
-    of the partial products.
-    """
-
-    # Group compensation bits together by moving them one column up
-    # until all the way to the left
-    for idx, col in enumerate(compensation):
-        for chunk in chunks(col, 2):
-            # The last column does not need to be negated again
-            if idx < len(compensation) - 1:
-                compensation[idx + 1] += [-1]
-
-            if len(chunk) == 1:
-                wires[idx] += [Wire(value=1, label='1')]
-
-    return wires
 
 
 def _reduce_partial_products(partials):
