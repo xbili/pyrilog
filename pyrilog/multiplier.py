@@ -192,4 +192,5 @@ def _carry_propagate(columns):
             else: # Add the wire into result
                 res += [column[0]]
 
-    return res, entities
+    # Last bit carry to be dropped
+    return res[:-1], entities
