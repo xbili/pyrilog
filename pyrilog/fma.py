@@ -1,10 +1,13 @@
 from pyrilog import multiplier
 from pyrilog.core.wire import Wire
+from pyrilog.utils import result_bit_width
 
 
 def create(width, size, cpa=True, signed=True):
     # Generate all the partial products
-    inputs, partials, entities = [], [], []
+    inputs, entities = [], []
+    partials = [[] for _ in range(result_bit_width(size, width * 2))]
+    compensation = [[] for _ in range(result_bit_width(size, width * 2))]
 
     for i in range(size):
         multiplier_in = [Wire() for _ in range(width)]
@@ -12,13 +15,21 @@ def create(width, size, cpa=True, signed=True):
 
         inputs += [multiplier_in, multiplicand_in]
 
-        product_partial, product_entities = multiplier._create_partial_products(
-            multiplier_in,
-            multiplicand_in,
-        )
+        product_partial, product_entities, product_compensation =\
+            multiplier._create_partial_products(
+                multiplier_in,
+                multiplicand_in,
+            )
 
-        partials += product_partial
+        for idx, col in enumerate(product_partial):
+            partials[idx] += col
+        for idx, col in enumerate(product_compensation):
+            compensation[idx] += col
         entities += product_entities
+
+    # Compensate negatively weighted bits
+    if signed:
+        partials = multiplier.compensate(partials, compensation)
 
     # Reduce partials
     penultimate, reduction_entities = multiplier._reduce_partial_products(partials)

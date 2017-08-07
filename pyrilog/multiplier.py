@@ -39,11 +39,11 @@ def _create_partial_products(multiplier, multiplicand):
     assert len(multiplier) == len(multiplicand)
 
     entities = []
-    wires = []
+    wires = [[] for _ in range(len(multiplier) * 2)]
+    compensation = [[] for _ in range(len(multiplier) * 2)]
 
     # 'AND' related bits together
     for col_x, x in enumerate(multiplier[:-1]):
-        layer = [None] * (len(multiplier) * 2)
         for col_a, a in enumerate(multiplicand):
             label = 'a{}x{}'.format(col_a, col_x)
             out = Wire(label=label)
@@ -54,19 +54,17 @@ def _create_partial_products(multiplier, multiplicand):
                 product = And(a, x, out)
                 negate = Not(out, None, out2)
 
+                # Compensate for negating one bit
+                compensation[col_x + col_a] += [-1]
+
                 entities += [product, negate]
-                layer[col_x + col_a] = out2
+                wires[col_x + col_a] += [out2]
             else:
                 entities += [And(a, x, out)]
-                layer[col_x + col_a] = out
+                wires[col_x + col_a] += [out]
 
-        wires += [layer]
-
-    # The final layer has every partial product negated except for the last,
-    # and has an additional value 1 bit added to the end.
-    final_layer = [None] * (len(multiplier) * 2)
-    final_layer[-1] = Wire(value=1, label='1')
-
+    # The final layer has every partial product negated except for the
+    # last
     for col_a, a in enumerate(multiplicand):
         label = 'a{}x{}'.format(col_a, len(multiplier) - 1)
 
@@ -74,23 +72,39 @@ def _create_partial_products(multiplier, multiplicand):
 
         if col_a == len(multiplicand) - 1:
             entities += [And(a, multiplier[-1], out)]
-            final_layer[col_a + len(multiplier) - 1] = out
+            wires[col_a + len(multiplier) - 1] += [out]
         else:
             out2 = Wire(label=label)
             product = And(a, multiplier[-1], out)
+            negate = Not(out, None, out2)
 
-            entities += [product]
-            entities += [Not(out, None, out2)]
+            # Compensate for negating the bit
+            compensation[col_a + len(multiplier) - 1] += [-1]
 
-            final_layer[col_a + len(multiplier) - 1] = out2
+            entities += [product, negate]
+            wires[col_a + len(multiplier) - 1] += [out2]
 
-    wires += [final_layer]
+    return wires, entities, compensation
 
-    # The first layer should have an additional bit to compensate for
-    # negative weighted bit
-    wires[0][len(multiplier)] = Wire(value=1, label='1')
 
-    return wires, entities
+def compensate(wires, compensation):
+    """
+    Compensate negatively weighted bits in 2s complement representation
+    of the partial products.
+    """
+
+    # Group compensation bits together by moving them one column up
+    # until all the way to the left
+    for idx, col in enumerate(compensation):
+        for chunk in chunks(col, 2):
+            # The last column does not need to be negated again
+            if idx < len(compensation) - 1:
+                compensation[idx + 1] += [-1]
+
+            if len(chunk) == 1:
+                wires[idx] += [Wire(value=1, label='1')]
+
+    return wires
 
 
 def _reduce_partial_products(partials):
@@ -102,20 +116,18 @@ def _reduce_partial_products(partials):
     :rtype: List[List[Wire]], List[Entity]
     """
 
-    bit_width = max(map(len, partials))
-    result_width = result_bit_width(len(partials), bit_width)
-
+    bit_width = len(partials)
+    result_width = result_bit_width(max(map(len, partials)), bit_width)
     entities = []
 
     # Transform the partial products
-    columns = list(zip(*partials))
-    while max(map(len, columns)) > 2:
+    while max(map(len, partials)) > 2:
         next_layer = [[] for _ in range(result_width)]
 
-        for idx, column in enumerate(columns):
-
+        for idx, column in enumerate(partials):
+            bits = [item for item in column if item != None]
             # Group chunks of bits into a full adder
-            for chunk in chunks([item for item in column if item != None], 3):
+            for chunk in chunks(bits, 3):
                 if len(chunk) == 1:
                     next_layer[idx] += chunk
                     continue
@@ -137,9 +149,9 @@ def _reduce_partial_products(partials):
                 if idx < result_width - 1:
                     next_layer[idx + 1] += [c]
 
-        columns = next_layer
+        partials = next_layer
 
-    return columns, entities
+    return partials, entities
 
 
 def _carry_propagate(columns):
