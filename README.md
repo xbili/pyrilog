@@ -8,6 +8,8 @@ Generates a Fused Multiply Add (FMA) unit in Verilog.
 
 `pip install pyrilog`
 
+**NOTE: Currently not on PyPi yet.**
+
 ## Usage
 
 The Fused Multiply Add operation is in the form:
