@@ -10,6 +10,10 @@ Generates a Fused Multiply Add (FMA) unit in Verilog.
 
 **NOTE: Currently not on PyPi yet - therefore the `pip` command would not work.**
 
+Alternatively, you can clone this repository and run:
+
+`python -m pyrilog <...args>`
+
 ## Usage
 
 The Fused Multiply Add operation is in the form:
