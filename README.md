@@ -8,7 +8,7 @@ Generates a Fused Multiply Add (FMA) unit in Verilog.
 
 `pip install pyrilog`
 
-**NOTE: Currently not on PyPi yet.**
+**NOTE: Currently not on PyPi yet - therefore the `pip` command would not work.**
 
 ## Usage
 
@@ -30,7 +30,7 @@ fashion.
 * `--width`: bit width of each element in the vectors that we want to perform dot
 product on
 * `--with-pipeline`: we'll include latches in between the stages of the
-reduction tree if this is enabled
+reduction tree if this is enabled **(work in progress)**
 
 
 ## Verification
